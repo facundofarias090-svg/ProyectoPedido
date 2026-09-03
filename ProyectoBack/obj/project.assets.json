@@ -8037,11 +8037,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\ProyectoPedido\\ProyectoPedido.csproj",
+      "projectUniqueName": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\proyectoback\\ProyectoPedido.csproj",
       "projectName": "ProyectoPedido",
-      "projectPath": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\ProyectoPedido\\ProyectoPedido.csproj",
+      "projectPath": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\proyectoback\\ProyectoPedido.csproj",
       "packagesPath": "C:\\Users\\Facundo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\ProyectoPedido\\obj\\",
+      "outputPath": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\proyectoback\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Facundo\\AppData\\Roaming\\NuGet\\NuGet.Config"

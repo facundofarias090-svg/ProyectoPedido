@@ -7,7 +7,7 @@ public class Producto
     [Key]
     public int ProductoId { get; set; }
     [ForeignKey("CategoriaId")]
-    public int CategoriaId { get; set; }
+    public int? CategoriaId { get; set; }
 
     public string? Nombre { get; set; }
     public string? Descripcion { get; set; }
@@ -15,6 +15,6 @@ public class Producto
     public string? PrecioVenta { get; set; }
     public string? Stock { get; set; }
 
-    public virtual Categoria Categoria { get; set; }
-    public virtual ICollection<PedidoDetalle> PedidoDetalle { get; set; } = new List<PedidoDetalle>();
+    public virtual Categoria? Categoria { get; set; }
+    public virtual ICollection<PedidoDetalle>? PedidoDetalle { get; set; } = new List<PedidoDetalle>();
 }
