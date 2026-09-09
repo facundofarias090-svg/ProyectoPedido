@@ -1,19 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Categorías | Proyecto Pedido</title>
 
     <link rel="stylesheet" href="bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <main class="container py-5">
+        <header class="page-header mb-4">
+            <p class="eyebrow mb-2">Proyecto Pedido</p>
+            <h1 class="display-5 fw-bold mb-2">Categorías</h1>
+            <p class="lead text-secondary mb-0">Consultá las categorías cargadas y agregá nuevas desde este panel.</p>
+        </header>
 
+        <section class="row g-4 align-items-start">
+            <div class="col-lg-8">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2 class="h4 mb-1">Listado de categorías</h2>
+                            <p class="text-secondary mb-0" id="category-summary">Cargando categorías...</p>
+                        </div>
+                        <button class="btn btn-outline-dark" type="button" id="refresh-button">Actualizar</button>
+                    </div>
 
+                    <div id="feedback" class="alert d-none" role="alert"></div>
 
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody id="category-table-body"></tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" class="empty-state d-none">Todavía no hay categorías cargadas.</div>
+                </div>
+            </div>
 
+            <div class="col-lg-4">
+                <div class="panel form-panel">
+                    <p class="eyebrow mb-2">Nueva categoría</p>
+                    <h2 class="h4 mb-2">Agregar categoría</h2>
+                    <p class="text-secondary mb-4">El nombre se guardará en mayúsculas desde la API.</p>
 
+                    <form id="category-form">
+                        <label class="form-label" for="category-name">Nombre</label>
+                        <input class="form-control form-control-lg mb-3" id="category-name" name="nombre" type="text" maxlength="100" placeholder="Ej. Bebidas" required>
+                        <button class="btn btn-primary w-100" type="submit" id="submit-button">Guardar categoría</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
     
 
 <script src="js/Producto 1.0.0.js"></script>

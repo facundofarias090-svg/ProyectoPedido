@@ -50,5 +50,67 @@ namespace ProyectoPedido.Controllers
 
             return Conflict("El producto ya existe");
         }
+
+        [HttpPut("{productoId}")]
+        public async Task<IActionResult> EditarProducto(int productoId, [FromBody] Producto producto)
+        {
+            var nombreMayuscula = producto.Nombre?.Trim().ToUpper();
+
+            var editarProducto = await _context.Producto.FindAsync(productoId);
+
+            if (editarProducto == null)
+            {
+                return Ok("Producto a editar no encontrado");
+            }
+
+            var existeNombre = await _context.Producto.AnyAsync(e =>
+                e.Nombre == nombreMayuscula && e.ProductoId != productoId);
+
+            if (existeNombre)
+            {
+                return Ok("Ya existe un producto con ese nombre");
+            }
+
+            editarProducto.CategoriaId = producto.CategoriaId;
+            editarProducto.Nombre = nombreMayuscula;
+            editarProducto.Descripcion = producto.Descripcion;
+            editarProducto.PrecioCosto = producto.PrecioCosto;
+            editarProducto.PrecioVenta = producto.PrecioVenta;
+            editarProducto.Stock = producto.Stock;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Producto editado correctamente");
+        }
+
+        [HttpDelete("{productoId}")]
+        public async Task<IActionResult> EliminarProducto(int productoId)
+        {
+            var producto = await _context.Producto.FindAsync(productoId);
+
+            if (producto == null)
+            {
+                return Ok("Producto no encontrado");
+            }
+
+            _context.Producto.Remove(producto);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpGet("{productoId}")]
+        public async Task<IActionResult> ObtenerProductoPorId(int productoId)
+        {
+            var producto = await _context.Producto
+                .FirstOrDefaultAsync(p => p.ProductoId == productoId);
+
+            if (producto == null)
+            {
+                return NotFound("Producto no encontrado");
+            }
+
+            return Ok(producto);
+        }
     }
 }
