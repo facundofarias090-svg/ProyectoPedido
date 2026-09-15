@@ -11,9 +11,9 @@ public class Producto
 
     public string? Nombre { get; set; }
     public string? Descripcion { get; set; }
-    public string? PrecioCosto { get; set; }
-    public string? PrecioVenta { get; set; }
-    public string? Stock { get; set; }
+    public decimal? PrecioCosto { get; set; }
+    public decimal? PrecioVenta { get; set; }
+    public int? Stock { get; set; }
 
     public virtual Categoria? Categoria { get; set; }
     public virtual ICollection<PedidoDetalle>? PedidoDetalle { get; set; } = new List<PedidoDetalle>();
