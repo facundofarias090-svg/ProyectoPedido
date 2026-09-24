@@ -57,14 +57,21 @@ function mostrarProducto(data) {
         tr.insertCell(1).textContent = obtenerValor(element, "descripcion");
         tr.insertCell(2).textContent = obtenerValor(element, "precioCosto");
         tr.insertCell(3).textContent = obtenerValor(element, "precioVenta");
-        const stock = tr.insertCell(4);
-        stock.textContent = obtenerValor(element, "stock");
+        tr.insertCell(4).textContent = obtenerValor(element, "stock");
+        const acciones = tr.insertCell(5);
         const botonEditar = document.createElement("button");
         botonEditar.type = "button";
         botonEditar.className = "btn btn-sm btn-warning ms-2";
         botonEditar.textContent = "Editar";
         botonEditar.addEventListener("click", () => abrirModalEdicion(element, productoId));
-        stock.appendChild(botonEditar);
+        acciones.appendChild(botonEditar);
+
+        const botonEliminar = document.createElement("button");
+        botonEliminar.type = "button";
+        botonEliminar.className = "btn btn-sm btn-danger ms-2";
+        botonEliminar.textContent = "Eliminar";
+        botonEliminar.addEventListener("click", () => eliminarProducto(productoId));
+        acciones.appendChild(botonEliminar);
     });
 }
 
@@ -115,6 +122,26 @@ async function editarProducto(event) {
         await ObtenerProductos();
     } catch (error) {
         console.error("Error al editar producto:", error);
+    }
+}
+
+async function eliminarProducto(productoId) {
+    if (!confirm("¿Desea eliminar este producto?")) {
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(`${API_PRODUCTOS}/${productoId}`, {
+            method: "DELETE"
+        });
+
+        if (!respuesta.ok) {
+            throw new Error(`HTTP ${respuesta.status}: ${await respuesta.text()}`);
+        }
+
+        await ObtenerProductos();
+    } catch (error) {
+        console.error("Error al eliminar producto:", error);
     }
 }
 

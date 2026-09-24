@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorías</title>
+
+    <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styleCATEGORIA.css">
+</head>
+<body>
+
+    <div class="container my-4">
+        <h2 class="mb-4">Gestion Categoria</h2>
+<!-- registrar categoría -->
+        <form id="form-categoria" class="row g-3 mb-4">
+            <div class="col-md-3">
+                <input type="text" id="nombre" class="form-control" placeholder="Nombre" required>
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="descripcion" class="form-control" placeholder="Descripción" required>
+            </div>
+            <div class="col-md-1 d-grid">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+
+
+<!-- modal -->
+        <div class="modal fade" id="modal-editar-categoria" tabindex="-1" aria-labelledby="modal-editar-categoria-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="form-editar-categoria">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-editar-categoria-label">Editar categoría</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="editar-nombre" class="form-label">Nombre</label>
+                                <input type="text" id="editar-nombre" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editar-descripcion" class="form-label">Descripción</label>
+                                <input type="text" id="editar-descripcion" class="form-control" required>
+                            </div>
+                        </div>  
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    <p>Tabla categorías</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-categorias" class="table-group-divider"></tbody>
+        </table>
+    </div>
+
+    
+
+<script src="../bootstrap/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+<script src="../js/Categoria 1.0.0.js"></script>
+
+</body>
+</html>

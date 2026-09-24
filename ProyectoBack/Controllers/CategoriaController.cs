@@ -37,16 +37,18 @@ namespace ProyectoPedido.Controllers
 
             if (!existeCategoria)
             {
-              var nuevaCategoria = new Categoria
+                var nuevaCategoria = new Categoria
                 {
-                    Nombre = nombreMayuscula
+                    Nombre = nombreMayuscula,
+                    Descripcion = categoria.Descripcion?.Trim()
                 };
-                            _context.Add(nuevaCategoria);
+                _context.Add(nuevaCategoria);
                 await _context.SaveChangesAsync();
                 return Ok("Categoría creada correctamente");
+            }
+
+            return Ok("Ya existe una categoría con ese nombre");
         }
-        return Ok();    
-       }
 
 
        [HttpPut("{categoriaId}")]
@@ -68,8 +70,9 @@ namespace ProyectoPedido.Controllers
             if (!existeNombre)
             {
                 editarCategoria.Nombre = nombreMayuscula;
-                    await _context.SaveChangesAsync();
-                
+                editarCategoria.Descripcion = categoria.Descripcion?.Trim();
+                await _context.SaveChangesAsync();
+
                 return Ok("Categoría editada correctamente");
             }
 
