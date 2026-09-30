@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEDIDO</title>
+
+    <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylePEDIDO.css">
+</head>
+<body>
+    <div class="container my-4">
+
+        <h3 class="titulo">Detalle del pedido</h3>
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <label for="producto" class="form-label">Producto</label>
+                <select class="form-select" id="producto" onchange="cargarPrecio()">
+                    <option value="">[SELECCIONE...]</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3 mb-md-0">
+                <label for="cantidad" class="form-label">Cantidad</label>
+                <input type="number" class="form-control" id="cantidad" min="1" step="1">
+            </div>
+            <div class="col-md-3 mb-3 mb-md-0">
+                <label for="precioUnitario" class="form-label">Precio Unitario</label>
+                <input type="number" class="form-control" id="precioUnitario" step="0.01" readonly>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary w-100" onclick="AgregarDetalle()">
+                    Agregar
+                </button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover text-center align-middle">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaDetalles"></tbody>
+            </table>
+        </div>
+
+        <p class="total">Total: <span id="totalPedido">$0</span></p>
+    </div>
+
+    <script src="../bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/Pedido 1.0.0.js"></script>
+</body>
+</html>

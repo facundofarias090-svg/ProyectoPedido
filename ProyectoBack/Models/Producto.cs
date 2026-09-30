@@ -15,6 +15,6 @@ public class Producto
     public decimal? PrecioVenta { get; set; }
     public int? Stock { get; set; }
 
-    public virtual Categoria Categoria { get; set; }
+    public virtual Categoria? Categoria { get; set; }
     public virtual ICollection<PedidoDetalle> PedidoDetalle { get; set; } = new List<PedidoDetalle>();
 }

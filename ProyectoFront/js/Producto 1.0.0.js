@@ -4,7 +4,11 @@ const frontendSeparado = window.location.protocol === "file:" ||
     const API_PRODUCTOS = frontendSeparado
     ? "http://localhost:5221/api/Producto"
     : "/api/Producto";
+    const API_CATEGORIAS = frontendSeparado
+    ? "http://localhost:5221/api/Categoria"
+    : "/api/Categoria";
 
+    let categoriasCargadas = [];
     let productoEnEdicion = null;
 
 async function ObtenerProductos() {
@@ -41,6 +45,38 @@ function obtenerValor(elemento, nombre) {
     return elemento[nombre] ?? elemento[nombre.charAt(0).toUpperCase() + nombre.slice(1)] ?? "";
 }
 
+async function cargarCategorias() {
+    try {
+        const respuesta = await fetch(API_CATEGORIAS, {
+            headers: { Accept: "application/json" }
+        });
+
+        if (!respuesta.ok) {
+            throw new Error(`HTTP ${respuesta.status}: ${await respuesta.text()}`);
+        }
+
+        const data = await respuesta.json();
+        const categorias = Array.isArray(data) ? data : data.$values;
+
+        if (!Array.isArray(categorias)) {
+            throw new Error("La API no devolvió una lista de categorías.");
+        }
+
+        categoriasCargadas = categorias;
+        ["categoria", "editar-categoria"].forEach((id) => {
+            const select = document.getElementById(id);
+            categorias.forEach((categoria) => {
+                const option = document.createElement("option");
+                option.value = obtenerValor(categoria, "categoriaId");
+                option.textContent = obtenerValor(categoria, "nombre");
+                select.appendChild(option);
+            });
+        });
+    } catch (error) {
+        console.error("Error al cargar categorías:", error);
+    }
+}
+
 function mostrarProducto(data) {
     const tbody = document.getElementById("tabla-productos");
 
@@ -53,12 +89,17 @@ function mostrarProducto(data) {
     data.forEach((element) => {
         const tr = tbody.insertRow();
         const productoId = obtenerValor(element, "productoId");
+        const categoriaId = obtenerValor(element, "categoriaId");
+        const categoria = categoriasCargadas.find((item) =>
+            String(obtenerValor(item, "categoriaId")) === String(categoriaId)
+        );
         tr.insertCell(0).textContent = obtenerValor(element, "nombre");
         tr.insertCell(1).textContent = obtenerValor(element, "descripcion");
-        tr.insertCell(2).textContent = obtenerValor(element, "precioCosto");
-        tr.insertCell(3).textContent = obtenerValor(element, "precioVenta");
-        tr.insertCell(4).textContent = obtenerValor(element, "stock");
-        const acciones = tr.insertCell(5);
+        tr.insertCell(2).textContent = obtenerValor(categoria ?? {}, "nombre");
+        tr.insertCell(3).textContent = obtenerValor(element, "precioCosto");
+        tr.insertCell(4).textContent = obtenerValor(element, "precioVenta");
+        tr.insertCell(5).textContent = obtenerValor(element, "stock");
+        const acciones = tr.insertCell(6);
         const botonEditar = document.createElement("button");
         botonEditar.type = "button";
         botonEditar.className = "btn btn-sm btn-warning ms-2";
@@ -79,6 +120,7 @@ function abrirModalEdicion(producto, productoId) {
     productoEnEdicion = productoId;
     document.getElementById("editar-nombre").value = obtenerValor(producto, "nombre");
     document.getElementById("editar-descripcion").value = obtenerValor(producto, "descripcion");
+    document.getElementById("editar-categoria").value = obtenerValor(producto, "categoriaId");
     document.getElementById("editar-precioCosto").value = obtenerValor(producto, "precioCosto");
     document.getElementById("editar-precioVenta").value = obtenerValor(producto, "precioVenta");
     document.getElementById("editar-stock").value = obtenerValor(producto, "stock");
@@ -96,6 +138,7 @@ async function editarProducto(event) {
     const producto = {
         nombre: document.getElementById("editar-nombre").value.trim(),
         descripcion: document.getElementById("editar-descripcion").value.trim(),
+        categoriaId: Number(document.getElementById("editar-categoria").value),
         precioCosto: document.getElementById("editar-precioCosto").value.trim(),
         precioVenta: document.getElementById("editar-precioVenta").value.trim(),
         stock: document.getElementById("editar-stock").value.trim()
@@ -156,6 +199,7 @@ async function guardarProducto(event) {
     const producto = {
         nombre: document.getElementById("nombre").value.trim(),
         descripcion: document.getElementById("descripcion").value.trim(),
+        categoriaId: Number(document.getElementById("categoria").value),
         precioCosto: document.getElementById("precioCosto").value.trim(),
         precioVenta: document.getElementById("precioVenta").value.trim(),
         stock: document.getElementById("stock").value.trim()
@@ -186,4 +230,10 @@ async function guardarProducto(event) {
 
 document.getElementById("form-producto").addEventListener("submit", guardarProducto);
 document.getElementById("form-editar-producto").addEventListener("submit", editarProducto);
-ObtenerProductos();
+
+async function inicializarProductos() {
+    await cargarCategorias();
+    await ObtenerProductos();
+}
+
+inicializarProductos();

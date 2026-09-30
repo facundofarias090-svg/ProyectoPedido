@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos</title>
+    <title>PRODUCTOS</title>
 
     <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="stylePRODUCTO.css">
@@ -11,7 +11,7 @@
 <body>
 
     <div class="container my-4">
-        <h2 class="mb-4">Gestion Producto</h2>
+        <h2 class="titulo">Gestion Producto</h2>
 <!-- registrar producto -->
         <form id="form-producto" class="row g-3 mb-4">
             <div class="col-md-3">
@@ -19,6 +19,11 @@
             </div>
             <div class="col-md-3">
                 <input type="text" id="descripcion" class="form-control" placeholder="Descripción" required>
+            </div>
+                 <div class="col-md-3">
+                     <select id="categoria" class="form-select" required>
+                          <option value="" selected disabled>Selecciona una categoría</option>
+                     </select>
             </div>
             <div class="col-md-2">
                 <input type="text" id="precioCosto" class="form-control" placeholder="Precio costo" required>
@@ -53,6 +58,12 @@
                                 <label for="editar-descripcion" class="form-label">Descripción</label>
                                 <input type="text" id="editar-descripcion" class="form-control" required>
                             </div>
+                                                            <div class="mb-3">
+                                                                <label for="editar-categoria" class="form-label">Categoría</label>
+                                                                <select id="editar-categoria" class="form-select" required>
+                                                                        <option value="" selected disabled>Selecciona una categoría</option>
+                                                                </select>
+                            </div>
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label for="editar-precioCosto" class="form-label">Precio costo</label>
@@ -84,6 +95,7 @@
                 <tr>
                     <th scope="col">Nombre</th>
                     <th scope="col">Descripción</th>
+                    <th scope="col">Categoría</th>
                     <th scope="col">PrecioCosto</th>
                     <th scope="col">PrecioVenta</th>
                     <th scope="col">Stock</th>
