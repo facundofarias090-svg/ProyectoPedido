@@ -1,239 +1,237 @@
-const frontendSeparado = window.location.protocol === "file:" ||
-    (window.location.hostname === "localhost" && !["5221", "7146"].includes(window.location.port));
+const apiProductos = `${APIURL}/producto`;
+const apiCategorias = `${APIURL}/categoria`;
 
-    const API_PRODUCTOS = frontendSeparado
-    ? "http://localhost:5221/api/Producto"
-    : "/api/Producto";
-    const API_CATEGORIAS = frontendSeparado
-    ? "http://localhost:5221/api/Categoria"
-    : "/api/Categoria";
-
-    let categoriasCargadas = [];
-    let productoEnEdicion = null;
-
-async function ObtenerProductos() {
-    const tbody = document.getElementById("tabla-productos");
-
-    if (!tbody) {
-        console.error("No existe el elemento #tabla-productos.");
-        return;
-    }
-
-    try {
-        const respuesta = await fetch(API_PRODUCTOS, {
-            headers: { Accept: "application/json" }
-        });
-
-        if (!respuesta.ok) {
-            throw new Error(`HTTP ${respuesta.status}: ${await respuesta.text()}`);
-        }
-
-        const data = await respuesta.json();
-        const productos = Array.isArray(data) ? data : data.$values;
-
-        if (!Array.isArray(productos)) {
-            throw new Error("La API no devolvió una lista de productos.");
-        }
-
-        mostrarProducto(productos);
-    } catch (error) {
-        console.error("Error al cargar productos:", error);
-    }
-}
+let categoriasCargadas = [];
+let productoEnEdicion = null;
 
 function obtenerValor(elemento, nombre) {
-    return elemento[nombre] ?? elemento[nombre.charAt(0).toUpperCase() + nombre.slice(1)] ?? "";
+  const nombreMayuscula = nombre.charAt(0).toUpperCase() + nombre.slice(1);
+  return elemento[nombre] ?? elemento[nombreMayuscula] ?? "";
 }
 
-async function cargarCategorias() {
-    try {
-        const respuesta = await fetch(API_CATEGORIAS, {
-            headers: { Accept: "application/json" }
-        });
-
-        if (!respuesta.ok) {
-            throw new Error(`HTTP ${respuesta.status}: ${await respuesta.text()}`);
-        }
-
-        const data = await respuesta.json();
-        const categorias = Array.isArray(data) ? data : data.$values;
-
-        if (!Array.isArray(categorias)) {
-            throw new Error("La API no devolvió una lista de categorías.");
-        }
-
-        categoriasCargadas = categorias;
-        ["categoria", "editar-categoria"].forEach((id) => {
-            const select = document.getElementById(id);
-            categorias.forEach((categoria) => {
-                const option = document.createElement("option");
-                option.value = obtenerValor(categoria, "categoriaId");
-                option.textContent = obtenerValor(categoria, "nombre");
-                select.appendChild(option);
-            });
-        });
-    } catch (error) {
-        console.error("Error al cargar categorías:", error);
+function procesarRespuesta(respuesta) {
+  return respuesta.text().then((mensaje) => {
+    if (!respuesta.ok) {
+      throw new Error(mensaje || `Error HTTP: ${respuesta.status}`);
     }
+
+    return mensaje;
+  });
 }
 
-function mostrarProducto(data) {
-    const tbody = document.getElementById("tabla-productos");
+function obtenerLista(respuesta, nombreLista) {
+  if (!respuesta.ok) {
+    return respuesta.text().then((mensaje) => {
+      throw new Error(mensaje || `Error HTTP: ${respuesta.status}`);
+    });
+  }
 
-    if (!tbody) {
-        return;
+  return respuesta.json().then((data) => {
+    const lista = Array.isArray(data) ? data : data.$values;
+
+    if (!Array.isArray(lista)) {
+      throw new Error(`La API no devolvió una lista de ${nombreLista}.`);
     }
 
-    tbody.innerHTML = "";
+    return lista;
+  });
+}
 
-    data.forEach((element) => {
-        const tr = tbody.insertRow();
-        const productoId = obtenerValor(element, "productoId");
-        const categoriaId = obtenerValor(element, "categoriaId");
-        const categoria = categoriasCargadas.find((item) =>
-            String(obtenerValor(item, "categoriaId")) === String(categoriaId)
-        );
-        tr.insertCell(0).textContent = obtenerValor(element, "nombre");
-        tr.insertCell(1).textContent = obtenerValor(element, "descripcion");
-        tr.insertCell(2).textContent = obtenerValor(categoria ?? {}, "nombre");
-        tr.insertCell(3).textContent = obtenerValor(element, "precioCosto");
-        tr.insertCell(4).textContent = obtenerValor(element, "precioVenta");
-        tr.insertCell(5).textContent = obtenerValor(element, "stock");
-        const acciones = tr.insertCell(6);
-        const botonEditar = document.createElement("button");
-        botonEditar.type = "button";
-        botonEditar.className = "btn btn-sm btn-warning ms-2";
-        botonEditar.textContent = "Editar";
-        botonEditar.addEventListener("click", () => abrirModalEdicion(element, productoId));
-        acciones.appendChild(botonEditar);
+function cargarCategorias() {
+  return fetch(apiCategorias, { headers: { Accept: "application/json" } })
+    .then((respuesta) => obtenerLista(respuesta, "categorías"))
+    .then((categorias) => {
+      categoriasCargadas = categorias;
 
-        const botonEliminar = document.createElement("button");
-        botonEliminar.type = "button";
-        botonEliminar.className = "btn btn-sm btn-danger ms-2";
-        botonEliminar.textContent = "Eliminar";
-        botonEliminar.addEventListener("click", () => eliminarProducto(productoId));
-        acciones.appendChild(botonEliminar);
+      ["categoria", "editar-categoria"].forEach((id) => {
+        const select = document.getElementById(id);
+
+        categorias.forEach((categoria) => {
+          const option = document.createElement("option");
+          option.value = obtenerValor(categoria, "categoriaId");
+          option.textContent = obtenerValor(categoria, "nombre");
+          select.appendChild(option);
+        });
+      });
     });
 }
 
+function obtenerProductos() {
+  fetch(apiProductos, { headers: { Accept: "application/json" } })
+    .then((respuesta) => obtenerLista(respuesta, "productos"))
+    .then(mostrarProductos)
+    .catch((error) => {
+      console.error("No se pudieron cargar los productos:", error);
+    });
+}
+
+function mostrarProductos(productos) {
+  const tbody = document.getElementById("tabla-productos");
+  tbody.innerHTML = "";
+
+  productos.forEach((producto) => {
+    const productoId = obtenerValor(producto, "productoId");
+    const categoriaId = obtenerValor(producto, "categoriaId");
+    const categoria = categoriasCargadas.find(
+      (item) =>
+        String(obtenerValor(item, "categoriaId")) === String(categoriaId),
+    );
+    const fila = tbody.insertRow();
+    fila.insertCell().textContent = obtenerValor(producto, "nombre");
+    fila.insertCell().textContent = obtenerValor(producto, "descripcion");
+    fila.insertCell().textContent = obtenerValor(categoria || {}, "nombre");
+    fila.insertCell().textContent = obtenerValor(producto, "precioCosto");
+    fila.insertCell().textContent = obtenerValor(producto, "precioVenta");
+    fila.insertCell().textContent = obtenerValor(producto, "stock");
+
+    const acciones = fila.insertCell();
+    acciones.appendChild(
+      crearBoton("Editar", "btn btn-sm btn-warning ms-2", () =>
+        abrirModalEdicion(producto, productoId),
+      ),
+    );
+    acciones.appendChild(
+      crearBoton("Eliminar", "btn btn-sm btn-danger ms-2", () =>
+        eliminarProducto(productoId),
+      ),
+    );
+  });
+}
+
+function crearBoton(texto, clase, accion) {
+  const boton = document.createElement("button");
+  boton.type = "button";
+  boton.className = clase;
+  boton.textContent = texto;
+  boton.addEventListener("click", accion);
+  return boton;
+}
+
 function abrirModalEdicion(producto, productoId) {
-    productoEnEdicion = productoId;
-    document.getElementById("editar-nombre").value = obtenerValor(producto, "nombre");
-    document.getElementById("editar-descripcion").value = obtenerValor(producto, "descripcion");
-    document.getElementById("editar-categoria").value = obtenerValor(producto, "categoriaId");
-    document.getElementById("editar-precioCosto").value = obtenerValor(producto, "precioCosto");
-    document.getElementById("editar-precioVenta").value = obtenerValor(producto, "precioVenta");
-    document.getElementById("editar-stock").value = obtenerValor(producto, "stock");
+  productoEnEdicion = productoId;
+  document.getElementById("editar-nombre").value = obtenerValor(
+    producto,
+    "nombre",
+  );
+  document.getElementById("editar-descripcion").value = obtenerValor(
+    producto,
+    "descripcion",
+  );
+  document.getElementById("editar-categoria").value = obtenerValor(
+    producto,
+    "categoriaId",
+  );
+  document.getElementById("editar-precioCosto").value = obtenerValor(
+    producto,
+    "precioCosto",
+  );
+  document.getElementById("editar-precioVenta").value = obtenerValor(
+    producto,
+    "precioVenta",
+  );
+  document.getElementById("editar-stock").value = obtenerValor(
+    producto,
+    "stock",
+  );
 
-    bootstrap.Modal.getOrCreateInstance(document.getElementById("modal-editar-producto")).show();
+  bootstrap.Modal.getOrCreateInstance(
+    document.getElementById("modal-editar-producto"),
+  ).show();
 }
 
-async function editarProducto(event) {
-    event.preventDefault();
-
-    if (!productoEnEdicion) {
-        return;
-    }
-
-    const producto = {
-        nombre: document.getElementById("editar-nombre").value.trim(),
-        descripcion: document.getElementById("editar-descripcion").value.trim(),
-        categoriaId: Number(document.getElementById("editar-categoria").value),
-        precioCosto: document.getElementById("editar-precioCosto").value.trim(),
-        precioVenta: document.getElementById("editar-precioVenta").value.trim(),
-        stock: document.getElementById("editar-stock").value.trim()
-    };
-
-    try {
-        const respuesta = await fetch(`${API_PRODUCTOS}/${productoEnEdicion}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "text/plain"
-            },
-            body: JSON.stringify(producto)
-        });
-
-        const mensaje = await respuesta.text();
-
-        if (!respuesta.ok) {
-            throw new Error(`HTTP ${respuesta.status}: ${mensaje}`);
-        }
-
-        bootstrap.Modal.getInstance(document.getElementById("modal-editar-producto")).hide();
-        productoEnEdicion = null;
-        await ObtenerProductos();
-    } catch (error) {
-        console.error("Error al editar producto:", error);
-    }
+function obtenerDatosProducto(prefijo = "") {
+  return {
+    nombre: document.getElementById(`${prefijo}nombre`).value.trim(),
+    descripcion: document
+      .getElementById(`${prefijo}descripcion`)
+      .value.trim(),
+    categoriaId: Number(
+      document.getElementById(`${prefijo}categoria`).value,
+    ),
+    precioCosto: document
+      .getElementById(`${prefijo}precioCosto`)
+      .value.trim(),
+    precioVenta: document
+      .getElementById(`${prefijo}precioVenta`)
+      .value.trim(),
+    stock: document.getElementById(`${prefijo}stock`).value.trim(),
+  };
 }
 
-async function eliminarProducto(productoId) {
-    if (!confirm("¿Desea eliminar este producto?")) {
-        return;
-    }
+function guardarProducto(event) {
+  event.preventDefault();
 
-    try {
-        const respuesta = await fetch(`${API_PRODUCTOS}/${productoId}`, {
-            method: "DELETE"
-        });
-
-        if (!respuesta.ok) {
-            throw new Error(`HTTP ${respuesta.status}: ${await respuesta.text()}`);
-        }
-
-        await ObtenerProductos();
-    } catch (error) {
-        console.error("Error al eliminar producto:", error);
-    }
+  fetch(apiProductos, {
+    method: "POST",
+    headers: {
+      Accept: "text/plain",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(obtenerDatosProducto()),
+  })
+    .then(procesarRespuesta)
+    .then(() => {
+      document.getElementById("form-producto").reset();
+      obtenerProductos();
+    })
+    .catch((error) => {
+      console.error("No se pudo guardar el producto:", error);
+      alert(error.message || "No se pudo guardar el producto.");
+    });
 }
 
+function editarProducto(event) {
+  event.preventDefault();
 
+  if (productoEnEdicion === null) {
+    return;
+  }
 
-
-async function guardarProducto(event) {
-    event.preventDefault();
-
-
-    //llama por id de tabla
-    const producto = {
-        nombre: document.getElementById("nombre").value.trim(),
-        descripcion: document.getElementById("descripcion").value.trim(),
-        categoriaId: Number(document.getElementById("categoria").value),
-        precioCosto: document.getElementById("precioCosto").value.trim(),
-        precioVenta: document.getElementById("precioVenta").value.trim(),
-        stock: document.getElementById("stock").value.trim()
-    };
-
-    try {
-        const respuesta = await fetch(API_PRODUCTOS, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "text/plain"
-            },
-            body: JSON.stringify(producto)
-        });
-
-        const mensaje = await respuesta.text();
-
-        if (!respuesta.ok) {
-            throw new Error(`HTTP ${respuesta.status}: ${mensaje}`);
-        }
-
-        document.getElementById("form-producto").reset();
-        await ObtenerProductos();
-    } catch (error) {
-        console.error("Error al guardar producto:", error);
-    }
+  fetch(`${apiProductos}/${productoEnEdicion}`, {
+    method: "PUT",
+    headers: {
+      Accept: "text/plain",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(obtenerDatosProducto("editar-")),
+  })
+    .then(procesarRespuesta)
+    .then(() => {
+      bootstrap.Modal.getInstance(
+        document.getElementById("modal-editar-producto"),
+      ).hide();
+      productoEnEdicion = null;
+      obtenerProductos();
+    })
+    .catch((error) => {
+      console.error("No se pudo editar el producto:", error);
+      alert(error.message || "No se pudo editar el producto.");
+    });
 }
 
-document.getElementById("form-producto").addEventListener("submit", guardarProducto);
-document.getElementById("form-editar-producto").addEventListener("submit", editarProducto);
+function eliminarProducto(productoId) {
+  if (!confirm("¿Desea eliminar este producto?")) {
+    return;
+  }
 
-async function inicializarProductos() {
-    await cargarCategorias();
-    await ObtenerProductos();
+  fetch(`${apiProductos}/${productoId}`, { method: "DELETE" })
+    .then(procesarRespuesta)
+    .then(obtenerProductos)
+    .catch((error) => {
+      console.error("No se pudo eliminar el producto:", error);
+      alert(error.message || "No se pudo eliminar el producto.");
+    });
 }
 
-inicializarProductos();
+document
+  .getElementById("form-producto")
+  .addEventListener("submit", guardarProducto);
+document
+  .getElementById("form-editar-producto")
+  .addEventListener("submit", editarProducto);
+
+cargarCategorias()
+  .then(obtenerProductos)
+  .catch((error) => {
+    console.error("No se pudieron cargar las categorías:", error);
+  });

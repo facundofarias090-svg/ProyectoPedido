@@ -8032,19 +8032,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Facundo\\.nuget\\packages\\": {}
+    "C:\\Users\\facun\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\proyectoback\\ProyectoPedido.csproj",
+      "projectUniqueName": "C:\\Users\\facun\\Desktop\\backend\\ProyectoPedido\\ProyectoBack\\ProyectoPedido.csproj",
       "projectName": "ProyectoPedido",
-      "projectPath": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\proyectoback\\ProyectoPedido.csproj",
-      "packagesPath": "C:\\Users\\Facundo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\proyectoback\\obj\\",
+      "projectPath": "C:\\Users\\facun\\Desktop\\backend\\ProyectoPedido\\ProyectoBack\\ProyectoPedido.csproj",
+      "packagesPath": "C:\\Users\\facun\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\facun\\Desktop\\backend\\ProyectoPedido\\ProyectoBack\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Facundo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\facun\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
