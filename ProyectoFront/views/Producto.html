@@ -10,8 +10,8 @@
 </head>
 <body>
 
-    <!-- navbar -->
-    <section>
+<!-- navbar -->
+<section>
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link" href="index.html">Inicio</a>
@@ -23,11 +23,24 @@
               <a class="nav-link" href="Pedido.html">Pedido</a>
             </li>
           </ul>
-    </section>
+</section>
 
+<!-- totales -->
+<section>
+    <div class="container ">
+        <div class="mb-3">
+            <strong>Cantidad de Productos: </strong> <span id="totalProductos">0</span> |
+            <strong>Stock Total General: </strong> <span id="totalStock">0</span> |
+            <strong>Capital invertido: </strong> <span id="totalCapital">0</span>
+        </div>
+</section>
+
+
+<!-- registrar producto -->
+<section>
     <div class="container my-4">
         <h2 class="titulo">Gestion Producto</h2>
-<!-- registrar producto -->
+
         <form id="form-producto" class="row g-3 mb-4">
             <div class="col-md-3">
                 <input type="text" id="nombre" class="form-control" placeholder="Nombre" required>
@@ -53,10 +66,10 @@
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </div>
         </form>
-
+</section>
 
 <!-- modal -->
-        <div class="modal fade" id="modal-editar-producto" tabindex="-1" aria-labelledby="modal-editar-producto-label" aria-hidden="true">
+<div class="modal fade" id="modal-editar-producto" tabindex="-1" aria-labelledby="modal-editar-producto-label" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form id="form-editar-producto">
@@ -101,9 +114,10 @@
                     </form>
                 </div>
             </div>
-        </div>
+</div>
 
-
+<!-- tabla listado productos -->
+<section>
     <p>Tabla productos</p>
         <table class="table table-striped">
             <thead>
@@ -120,7 +134,7 @@
             <tbody id="tabla-productos" class="table-group-divider"></tbody>
         </table>
     </div>
-
+</section>
     
 
 <script src="../js/config.js"></script>

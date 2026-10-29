@@ -19,8 +19,8 @@ namespace ProyectoPedido.Controllers
         [HttpGet]
         public async Task<ActionResult> ListadoProducto()
         {
-            var productos = await _context.Producto.ToListAsync();
-            productos = productos.Select(p => new Producto
+            var listadoProductos = await _context.Producto.ToListAsync();
+            var productoMostrar = listadoProductos.Select(p => new Producto
             {
                 ProductoId = p.ProductoId,
                 CategoriaId = p.CategoriaId,
@@ -31,7 +31,16 @@ namespace ProyectoPedido.Controllers
                 Stock = p.Stock
             }).ToList();
         
-            return Ok(productos);
+                var resultado = new
+                {
+                    totalProductos = productoMostrar.Count,
+                    Productos = productoMostrar,
+                    totalStock = productoMostrar.Sum(p => p.Stock),
+                    totalCapital = productoMostrar.Sum(p => p.Stock * p.PrecioCosto)
+                };
+
+
+            return Ok(resultado);
         }
 
         [HttpPost]

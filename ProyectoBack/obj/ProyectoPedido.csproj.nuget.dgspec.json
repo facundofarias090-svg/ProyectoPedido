@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\facun\\Desktop\\backend\\ProyectoPedido\\proyectoback\\ProyectoPedido.csproj": {}
+    "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\ProyectoBack\\ProyectoPedido.csproj": {}
   },
   "projects": {
-    "C:\\Users\\facun\\Desktop\\backend\\ProyectoPedido\\proyectoback\\ProyectoPedido.csproj": {
+    "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\ProyectoBack\\ProyectoPedido.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\facun\\Desktop\\backend\\ProyectoPedido\\proyectoback\\ProyectoPedido.csproj",
+        "projectUniqueName": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\ProyectoBack\\ProyectoPedido.csproj",
         "projectName": "ProyectoPedido",
-        "projectPath": "C:\\Users\\facun\\Desktop\\backend\\ProyectoPedido\\proyectoback\\ProyectoPedido.csproj",
-        "packagesPath": "C:\\Users\\facun\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\facun\\Desktop\\backend\\ProyectoPedido\\proyectoback\\obj\\",
+        "projectPath": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\ProyectoBack\\ProyectoPedido.csproj",
+        "packagesPath": "C:\\Users\\Facundo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Facundo\\Desktop\\ProyectoPedido\\ProyectoBack\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\facun\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Facundo\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -87,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.425/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.427/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

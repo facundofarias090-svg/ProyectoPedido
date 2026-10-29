@@ -58,41 +58,52 @@ function cargarCategorias() {
 
 function obtenerProductos() {
   fetch(apiProductos, { headers: { Accept: "application/json" } })
-    .then((respuesta) => obtenerLista(respuesta, "productos"))
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        return respuesta.text().then((mensaje) => {
+          throw new Error(mensaje || `Error HTTP: ${respuesta.status}`);
+        });
+      }
+
+      return respuesta.json();
+    })
     .then(mostrarProductos)
     .catch((error) => {
       console.error("No se pudieron cargar los productos:", error);
     });
 }
 
-function mostrarProductos(productos) {
+function mostrarProductos(data) {
+  document.getElementById("totalProductos").textContent = data.totalProductos;
+  document.getElementById("totalStock").textContent = data.totalStock;
+  document.getElementById("totalCapital").textContent = data.totalCapital;
+
   const tbody = document.getElementById("tabla-productos");
+  if (!tbody) return;
   tbody.innerHTML = "";
 
-  productos.forEach((producto) => {
-    const productoId = obtenerValor(producto, "productoId");
-    const categoriaId = obtenerValor(producto, "categoriaId");
+  data.productos.forEach((producto) => {
+    const categoriaId = producto.categoriaId;
     const categoria = categoriasCargadas.find(
-      (item) =>
-        String(obtenerValor(item, "categoriaId")) === String(categoriaId),
+      (item) => item.categoriaId === categoriaId,
     );
     const fila = tbody.insertRow();
-    fila.insertCell().textContent = obtenerValor(producto, "nombre");
-    fila.insertCell().textContent = obtenerValor(producto, "descripcion");
-    fila.insertCell().textContent = obtenerValor(categoria || {}, "nombre");
-    fila.insertCell().textContent = obtenerValor(producto, "precioCosto");
-    fila.insertCell().textContent = obtenerValor(producto, "precioVenta");
-    fila.insertCell().textContent = obtenerValor(producto, "stock");
+    fila.insertCell().textContent = producto.nombre;
+    fila.insertCell().textContent = producto.descripcion;
+    fila.insertCell().textContent = categoria ? categoria.nombre : "";
+    fila.insertCell().textContent = producto.precioCosto;
+    fila.insertCell().textContent = producto.precioVenta;
+    fila.insertCell().textContent = producto.stock;
 
     const acciones = fila.insertCell();
     acciones.appendChild(
       crearBoton("Editar", "btn btn-sm btn-warning ms-2", () =>
-        abrirModalEdicion(producto, productoId),
+        abrirModalEdicion(producto, producto.productoId),
       ),
     );
     acciones.appendChild(
       crearBoton("Eliminar", "btn btn-sm btn-danger ms-2", () =>
-        eliminarProducto(productoId),
+        eliminarProducto(producto.productoId),
       ),
     );
   });
