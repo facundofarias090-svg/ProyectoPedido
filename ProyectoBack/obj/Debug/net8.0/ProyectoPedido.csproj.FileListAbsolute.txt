@@ -777,3 +777,9 @@ C:\Users\facun\Desktop\backend\ProyectoPedido\proyectoback\obj\Debug\net8.0\refi
 C:\Users\facun\Desktop\backend\ProyectoPedido\proyectoback\obj\Debug\net8.0\ProyectoPedido.pdb
 C:\Users\facun\Desktop\backend\ProyectoPedido\proyectoback\obj\Debug\net8.0\ProyectoPedido.genruntimeconfig.cache
 C:\Users\facun\Desktop\backend\ProyectoPedido\proyectoback\obj\Debug\net8.0\ref\ProyectoPedido.dll
+C:\Users\facun\Desktop\backend\ProyectoPedido\buildverify\appsettings.Development.json
+C:\Users\facun\Desktop\backend\ProyectoPedido\buildverify\appsettings.json
+C:\Users\facun\Desktop\backend\ProyectoPedido\buildverify\ProyectoPedido.deps.json
+C:\Users\facun\Desktop\backend\ProyectoPedido\buildverify\ProyectoPedido.runtimeconfig.json
+C:\Users\facun\Desktop\backend\ProyectoPedido\buildverify\ProyectoPedido.dll
+C:\Users\facun\Desktop\backend\ProyectoPedido\buildverify\ProyectoPedido.pdb

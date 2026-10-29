@@ -40,10 +40,6 @@ app.UseHttpsRedirection();
 var frontendPath = Path.Combine(app.Environment.ContentRootPath, "..", "ProyectoFront");
 var frontendProvider = new PhysicalFileProvider(frontendPath);
 
-app.UseDefaultFiles(new DefaultFilesOptions
-{
-    FileProvider = frontendProvider
-});
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = frontendProvider
@@ -52,6 +48,7 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseCors("Frontend");
 app.UseAuthorization();
 
+app.MapGet("/", () => Results.Redirect("/views/index.html"));
 app.MapControllers();
 
 app.Run();
